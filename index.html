@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<style>
+			#newReviewFormModal .modal-dialog {width:60%;}
+			ul {padding:0}
+			ul {list-style-type: none}
+			li.menu-icon {padding-left:15px;padding-right:15px;padding-top:15px;padding-bottom:15px;cursor:pointer;font-size:12px;margin:0;border-left:solid 4px transparent;}
+			li.menu-icon i {font-size:22px; pointer-events: none;}
+			li.menu-icon i.hover-arrow {font-size:16px}
+			li.menu-icon.active {border-left:solid 4px #517fd4; padding-left:15px;background-color: #f4f4f4}
+			li.menu-icon.active i {color:#517fd4;}
+			li.menu-icon:hover {background-color: #f4f4f4}
+			li.menu-icon:hover>.hover-arrow {display:block;}
+			li.menu-icon.active:hover>.hover-arrow {display:none;}
+			li .hover-arrow {float:right; margin-right:-22px; font-size:18px;position:relative; top:50%;z-index:1000;color:#517fd4;display:none;}
+
+			.in-view {position:static; !important;}
+
+			.modal-hidden {display: none;}
+			/*#form-type {width:100%;}
+            #form-review-route {width:100%;}*/
+			/*#modal-body-content {overflow-x:hidden;}*/
+			#modal-body-content {overflow:hidden;}
+		</style>
+		<title>Title of the document</title>
+	</head>
+	<body>
+		<button class="btn btn-primary" id="open-modal">Open Modal</button>
+		<!-- Modal -->
+        <div class="modal fade" id="newFormModal" tabindex="-1" role="dialog" aria-labelledby="newFormModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <!-- <form method="post"> -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="newFormModalLabel">New Form</h4>
+					</div>
+					<div class="modal-body">
+
+						<ul class="bs-modal-menu-nav">
+							<li id="main-settings-nav" class="menu-icon active" data-modal-title="General Settings">
+								<i class="fa fa-file-text" style="" aria-hidden="true"></i>Main
+							</li>
+							<li id="form-type-nav" class="menu-icon" data-modal-title="Form Type Settings">
+								<i class="fa fa-map-signs" style="font-size:22px;" aria-hidden="true"></i>Form Type
+							</li>
+							<li id="form-review-route-nav" class="menu-icon" data-modal-title="Review Route Settings">
+								<i class="fa fa-sliders" style="font-size:22px;" aria-hidden="true"></i>Review Route
+							</li>
+						</ul>
+
+						<div id="modal-body-content">
+							<form id="main-settings" class="in-view bs-modal-menu-page">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label>Name</label>
+											<input id="form_name" name="form_name" type="text" class="form-control" placeholder="Enter a name">
+											<p class="help-block">Enter a name for the form.</p>
+										</div>
+										<div class="form-group">
+											<label>Description</label>
+											<textarea id="form_description" name="form_description" class="form-control" rows="3" placeholder="Enter description"></textarea>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-6">
+										<label>Form Visibility</label>
+										<p>This settings determins if the form is available for the public to fill out. If you don't want this form available leave this setting unchecked</p>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<div class="checkbox">
+												<label><input id="is_lookup" name="is_lookup" type="checkbox" value="1">Show this form in lookup fields.</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<hr>
+							</form>
+							<form id="form-type" class="bs-modal-menu-page">
+								<div class="row">
+									<div class="col-md-6">
+										<label>Choose Form Type</label>
+										<p>Select the type of form you're creating. This is where you set whether you're creating a <code>Permit</code> or a <code>License</code></p>
+										<p>Next select the <code>Permit</code> or <code>License</code> type. These are configured seperatly in the application and must be configured before you can create a form.</p>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Form Type</label>
+											<select id="form_type" name="form_type" class="form-control">
+												<option value="permit">Permit</option>
+												<option value="license">License</option>
+											</select>
+										</div>
+										<div class="form-group permit-related hide">
+											<label>Permit Type</label>
+											<select id="permit_category" name="permit_category" class="form-control">
+												<option value="">Select Permit Category</option>
+											</select>
+										</div>
+										<div class="form-group license-related hide">
+											<label>License Type</label>
+											<select id="license_type" name="license_type" class="form-control">
+												<option value="">Select License Type</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="row" id="license-expiration-settings">
+									<div class="col-md-6">
+										<label>License Expiration Settings</label>
+										<p>These settings are where you configure the expiration settings for licenses.</p>
+										<p>If this <code>License</code> form is mapped to the <code>Munilogic Core System</code> the expiration settings from the core system will be used</p>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group license-related license-expiration-wrap hide">
+											<label>License Expiration</label>
+											<select id="license_validity" name="license_validity" class="form-control">
+												<option value="">Select Expiration</option>
+												<option value="2y">2 Years</option>
+												<option value="1y">1 Year</option>
+												<option value="6m">6 Months</option>
+												<option value="custom">Custom</option>
+												<option value="date">Expires on</option>
+											</select>
+										</div>
+										<div class="custom-related hide">
+											<div class="row">
+												<div class="form-group col-md-6">
+													<input id="number_of" type="number" name="number_of" class="form-control" placeholder="Number of">
+												</div>
+												<div class="form-group col-md-6">
+													<select id="license_exp_type" name="license_exp_type" class="form-control">
+														<option value="day">Day(s)</option>
+														<option value="month">Month(s)</option>
+														<option value="year">Year(s)</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="form-group exp-date-related hide">
+											<div class="input-group date">
+												<div class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</div>
+												<input id="expires_on" name="expires_on" type="text" class="form-control pull-right">
+											</div>
+										</div>
+									</div>
+								</div>
+								<hr>
+							</form>
+							<form id="form-review-route" class="bs-modal-menu-page">
+								<div class="row">
+									<div class="col-md-6">
+										<label>Choose Review Route</label>
+										<p>Select the <code>Review Route</code> that applications submitted using this form will go through.</p>
+										<p><code>Review Routes</code> are configured seperately and are where any required inspections are added</p>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Review Route</label>
+											<select id="review_route" name="review_route" class="form-control">
+												<option value="">Not Applicable</option>
+											</select>
+											<button class="btn btn-primary btn-xs edit-review-route" data-route-id="12">
+												<i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+											</button>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-6">
+										<label>Add Application Fee</label>
+										<p>If applications based on this form require an application fee add it here</p>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Application Fee</label>
+											<select id="fee_id" name="fee_id" class="form-control">
+												<option value="">No Fee</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+						<button type="submit" id="save-form" class="btn btn-primary" data-save="modal">Save</button>
+						<button type="submit" id="save-close-form" class="btn btn-primary" data-save="modal" data-dismiss="modal">Save & Close</button>
+					</div>
+				</div>
+                <!-- </form> -->
+            </div>
+        </div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="bs.modal.menu.js"></script>
+		<script>
+			(function ($) {
+				$('#open-modal').on('click', function () {
+					// init();
+					$('#newFormModal').modal({
+						backdrop: 'static',
+						keyboard: false,
+						show: true,
+						saveEvents: true,
+						showArrows: true,
+						showActiveMenuInTitle: true,
+						menuClickEvent: true,
+						menuPlacement: 'top',
+						save: function (page, fields) {
+							console.log(page);
+							console.log(fields);
+						},
+						beforePageShow(menu, page) {
+							// console.log('before page show');
+							// console.log(menu);
+							// console.log(page);
+						}
+					});
+
+				});
+
+				$(document).on('bs.menu.saved', function (e) {
+					console.log('the save event has been triggered');
+					console.log(e);
+				});
+
+				$(document).on('bs.menu.clicked', function (e) {
+					// console.log('the menu clicked event has been triggered');
+					// console.log(e);
+				});
+
+			})(jQuery);
+		</script>
+	</body>
+</html>
